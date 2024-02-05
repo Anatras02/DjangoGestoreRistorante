@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile
+    environment:
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - DEVELOPMENT_MODE=${DEVELOPMENT_MODE}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_DATABASE}
+    volumes:
+      - staticfiles:/app/staticfiles
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - internal_network
+
+  nginx:
+    build:
+      context: deploy
+      dockerfile: Dockerfile-staticfiles
+    ports:
+      - "8001:8001"
+    volumes:
+      - staticfiles:/usr/share/nginx/html/static
+    networks:
+      - internal_network
+    depends_on:
+      - django
+
+  db:
+    image: postgres:16.1-alpine3.19
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+    volumes:
+      - my-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - internal_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  my-db:
+  staticfiles:
+
+networks:
+  internal_network:
+    driver: bridge

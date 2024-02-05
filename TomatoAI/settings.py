@@ -90,14 +90,7 @@ if DEVELOPMENT_MODE is True:
     }
 elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv('MYSQL_DATABASE'),
-            'USER': os.getenv('MYSQL_USER'),
-            'PASSWORD': os.getenv('MYSQL_ROOT_PASSWORD'),
-            'HOST': os.getenv('DB_HOST', 'db'),  # Use 'db' as default from .env
-            'PORT': os.getenv('DB_PORT', '3306'),  # Use '3306' as default from .env
-        }
+        'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
     }
 
 # Password validation
