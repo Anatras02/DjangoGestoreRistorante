@@ -29,7 +29,7 @@ jobs:
 
       - name: Run tests with pytest
         run: |
-          pytest --cov=TomatoAI --cov-report=xml  
+          pytest 
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v2
