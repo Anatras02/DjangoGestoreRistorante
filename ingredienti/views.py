@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from ingredienti.models import Ingrediente
 from ingredienti.serializers import IngredienteSerializer
+from ricette.serializers import RicettaSerializer
 
 
 class IngredienteViewSet(viewsets.ModelViewSet):
@@ -19,6 +20,6 @@ class IngredienteViewSet(viewsets.ModelViewSet):
     def ricette(self, request, pk=None):
         ingrediente = self.get_object()
         ricette = ingrediente.ricette.all()
-        serializer = IngredienteSerializer(ricette, many=True)
+        serializer = RicettaSerializer(ricette, many=True, context={'request': request})
 
         return Response(serializer.data)
