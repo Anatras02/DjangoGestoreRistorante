@@ -27,7 +27,7 @@ class RistoranteViewSet(viewsets.ModelViewSet):
         ingredienti_ids = Ricetta.objects.filter(ristoranti=ristorante).values_list('ingredienti', flat=True).distinct()
         ingredienti = Ingrediente.objects.filter(id__in=ingredienti_ids)
 
-        serializer = IngredienteSerializer(ingredienti, many=True)
+        serializer = IngredienteSerializer(ingredienti, many=True, context={'request': request})
 
         return Response(serializer.data)
 
@@ -40,7 +40,6 @@ class RistoranteViewSet(viewsets.ModelViewSet):
         ristorante = self.get_object()
 
         ricette = Ricetta.objects.filter(ristoranti=ristorante)
-
-        serializer = RicettaSerializer(ricette, many=True)
+        serializer = RicettaSerializer(ricette, many=True, context={'request': request})
 
         return Response(serializer.data)
