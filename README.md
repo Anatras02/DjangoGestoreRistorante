@@ -138,3 +138,32 @@ TomatoAI utilizza Swagger UI per offrire una documentazione interattiva e testab
 - **Senza Docker**: Se stai eseguendo il progetto localmente senza Docker, assicurati che il server di sviluppo Django sia in esecuzione. Puoi accedere a Swagger UI all'indirizzo [http://localhost:8000/swagger](http://localhost:8000/swagger), assumendo che il server di sviluppo sia configurato per utilizzare la porta predefinita 8000.
 
 Swagger UI fornisce una panoramica completa delle API disponibili, consentendo di esplorare i vari endpoint, i loro parametri, le risposte attese e di effettuare richieste di prova direttamente dall'interfaccia utente.
+
+---
+
+## Integrazione con GitHub Actions
+
+Per migliorare la qualità del codice e garantire che le modifiche non introducano regressioni, TomatoAI utilizza GitHub Actions per automatizzare l'esecuzione dei test. La pipeline è configurata per scattare automaticamente al push di nuovi commit sulla repository e alla creazione di pull request.
+
+### Dettagli della Pipeline
+
+La pipeline GitHub Actions esegue i seguenti passaggi:
+
+- Installazione delle dipendenze necessarie per il progetto.
+- Avvio dei servizi necessari, come il database.
+- Esecuzione dei test del progetto Django tramite il comando `pytest`.
+
+Questa automazione aiuta a rilevare precocemente problemi e errori, facilitando lo sviluppo di un codice più robusto e affidabile.
+
+### Come Funziona
+
+- **Al Push**: Ogni volta che un nuovo commit viene pushato sul branch main della repository, la pipeline GitHub Actions viene attivata per eseguire i test.
+- **Alla Creazione di Pull Request**: Quando viene creata una pull request, la pipeline verifica automaticamente i cambiamenti proposti eseguendo i test. Questo assicura che le modifiche non rompano la funzionalità esistente prima che la pull request venga accettata e mergiata.
+
+### Risultati
+
+I risultati dell'esecuzione della pipeline sono visibili direttamente su GitHub, nella sezione Actions della tua repository. Qui puoi vedere se i test sono stati superati con successo o se sono emersi errori che richiedono attenzione.
+
+---
+
+Con l'integrazione di GitHub Actions, TomatoAI si avvale di un processo di integrazione continua (CI) per mantenere elevati standard di qualità del codice e facilitare il processo di revisione delle pull request.
